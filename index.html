@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyến Bay Sự Nghiệp | Mỵ Thùy Dung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Nunito:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f4f9fc;
+            color: #2c4759;
+            overflow-x: hidden;
+            position: relative;
+            overflow: hidden; /* Prevent scroll during intro */
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* ------------------------------------- */
+        /* INTRO CINEMATIC SEQUENCE              */
+        /* ------------------------------------- */
+        #intro-screen {
+            background: linear-gradient(135deg, #7eb6d9 0%, #a2d2f2 50%, #c4e6fa 100%);
+            z-index: 9999;
+        }
+
+        .intro-scene {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes sceneFadeOut { to { opacity: 0; transform: scale(1.1); visibility: hidden; } }
+        @keyframes sceneFlyIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes sceneFlyOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-100%); visibility: hidden; } }
+        @keyframes scenePopIn { 
+            0% { opacity: 0; transform: scale(0.5) translateY(50px); } 
+            60% { opacity: 1; transform: scale(1.1) translateY(-10px); } 
+            100% { opacity: 1; transform: scale(1) translateY(0); } 
+        }
+
+        .scene-1 { animation: sceneFadeOut 0.6s 2.5s forwards cubic-bezier(0.4, 0, 0.2, 1); }
+        .scene-2 { opacity: 0; animation: sceneFlyIn 0.8s 2.6s forwards cubic-bezier(0.2, 0.8, 0.2, 1), sceneFlyOut 0.6s 5.2s forwards cubic-bezier(0.4, 0, 0.2, 1); }
+        .scene-3 { opacity: 0; animation: scenePopIn 1s 5.5s forwards cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        @keyframes loadBar { to { width: 100%; } }
+        .animate-load-bar { animation: loadBar 2s ease-in-out forwards; }
+        @keyframes fastCloud { 0% { transform: translateX(0); } 100% { transform: translateX(-200vw); } }
+        @keyframes planeTurbulence { 0%, 100% { transform: translateY(0) rotate(15deg); } 25% { transform: translateY(-15px) rotate(12deg); } 75% { transform: translateY(10px) rotate(18deg); } }
+        
+        .spin-slow { animation: spin 8s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* ------------------------------------- */
+        /* BACKGROUND & ELEMENTS                 */
+        /* ------------------------------------- */
+        .sky-bg { background: linear-gradient(180deg, #b6dcf2 0%, #dcf0fa 40%, #f4f9fc 100%); position: relative; z-index: 1; }
+        .clouds-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .cloud { position: absolute; background: rgba(255, 255, 255, 0.85); border-radius: 50px; filter: blur(1px); animation: moveClouds linear infinite; }
+        .cloud::before, .cloud::after { content: ''; position: absolute; background: rgba(255, 255, 255, 0.85); border-radius: 50%; }
+        .cloud::before { width: 50px; height: 50px; top: -20px; left: 15px; }
+        .cloud::after { width: 70px; height: 70px; top: -35px; right: 15px; }
+
+        .c1 { width: 160px; height: 50px; top: 15%; animation-duration: 45s; left: -200px; opacity: 0.9; transform: scale(1.2); }
+        .c2 { width: 120px; height: 40px; top: 40%; animation-duration: 60s; left: -150px; opacity: 0.6; transform: scale(0.8); }
+        .c3 { width: 200px; height: 60px; top: 65%; animation-duration: 55s; left: -250px; opacity: 0.7; transform: scale(1.5); }
+        .c4 { width: 140px; height: 45px; top: 85%; animation-duration: 40s; left: -200px; opacity: 0.8; transform: scale(1); }
+        @keyframes moveClouds { 0% { transform: translateX(0); } 100% { transform: translateX(110vw); } }
+
+        .glow-orb { position: absolute; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%); pointer-events: none; mix-blend-mode: overlay; animation: floatOrb 25s infinite ease-in-out alternate; }
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); opacity: 0.2; } 50% { transform: translate(150px, -150px) scale(1.5); opacity: 0.5; } 100% { transform: translate(-100px, 200px) scale(1.2); opacity: 0.2; } }
+
+        /* PROFILE IMAGE */
+        .profile-pic { width: 220px; height: 220px; object-fit: cover; border-radius: 50%; border: 6px solid white; animation: float 4s ease-in-out infinite, pulseGlow 3s infinite alternate; position: relative; z-index: 10; }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 20px rgba(255,255,255,0.6), 0 10px 20px rgba(137,183,214,0.3); } 100% { box-shadow: 0 0 50px rgba(255,255,255,1), 0 0 80px rgba(165,205,236,0.8); } }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+
+        /* ------------------------------------- */
+        /* TIMELINE & FLIGHT PATH                */
+        /* ------------------------------------- */
+        .timeline-container { position: relative; max-width: 1100px; margin: 0 auto; padding: 80px 20px; z-index: 5; }
+
+        .flight-path { position: absolute; left: 50%; top: 0; bottom: 0; width: 6px; transform: translateX(-50%); background-image: linear-gradient(rgba(143, 185, 214, 0.4) 50%, rgba(255,255,255,0) 0%); background-size: 6px 30px; background-repeat: repeat-y; z-index: 1; border-radius: 3px; }
+        .flight-progress { position: absolute; left: 50%; top: 0; width: 6px; transform: translateX(-50%); background: linear-gradient(180deg, #8fb9d6 0%, #bde0f5 100%); z-index: 2; transition: height 0.1s linear; border-radius: 3px; box-shadow: 0 0 15px rgba(143, 185, 214, 0.8), 0 0 30px rgba(255,255,255,0.8); }
+        
+        @keyframes dropTravel { 0% { top: 0; opacity: 1; transform: translateX(-50%) scale(1); } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; transform: translateX(-50%) scale(0.5); } }
+        .flight-drop { position: absolute; left: 50%; width: 12px; height: 40px; background: #fff; border-radius: 10px; transform: translateX(-50%); box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8), 0 0 30px 10px rgba(143, 185, 214, 0.8); animation: dropTravel 6s linear infinite; z-index: 3; }
+
+        .airplane { position: absolute; left: 50%; top: 0; transform: translate(-50%, -50%) rotate(135deg); font-size: 46px; color: #78add1; z-index: 10; filter: drop-shadow(0 8px 12px rgba(120, 173, 209, 0.5)); transition: top 0.1s linear; }
+        .airplane::after { content: ''; position: absolute; top: -30px; left: 50%; width: 8px; height: 60px; background: linear-gradient(to top, rgba(255,255,255,1), transparent); transform: translateX(-50%); border-radius: 10px; filter: blur(3px); }
+
+        /* ------------------------------------- */
+        /* WAYPOINTS & ENHANCED CARDS            */
+        /* ------------------------------------- */
+        .waypoint { position: relative; width: 45%; margin-bottom: 120px; opacity: 0; z-index: 5; transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .waypoint-left { left: 0; text-align: right; transform: translateX(-150px) scale(0.9); }
+        .waypoint-right { left: 55%; text-align: left; transform: translateX(150px) scale(0.9); }
+        .waypoint.visible { transform: translateX(0) scale(1); opacity: 1; }
+
+        /* Icon Markers */
+        .marker { position: absolute; top: 30px; width: 38px; height: 38px; background-color: white; border: 4px solid #a5cdec; border-radius: 50%; z-index: 4; transition: all 0.4s; display: flex; align-items: center; justify-content: center; color: #a5cdec; font-size: 16px; box-shadow: 0 4px 10px rgba(143, 185, 214, 0.3); }
+        .waypoint-left .marker { right: -19px; transform: translateX(50%); }
+        .waypoint-right .marker { left: -19px; transform: translateX(-50%); }
+        @keyframes radarPulse { 0% { box-shadow: 0 0 0 0 rgba(143, 185, 214, 0.8); } 70% { box-shadow: 0 0 0 25px rgba(143, 185, 214, 0); } 100% { box-shadow: 0 0 0 0 rgba(143, 185, 214, 0); } }
+        .waypoint.visible .marker { background-color: #d1ecf9; border-color: #78add1; color: #3a6887; animation: radarPulse 2s infinite; }
+        .waypoint.visible .marker-final { background-color: #78add1; border-color: #fff; color: #fff; animation: radarPulse 2s infinite; }
+
+        /* Card Effects */
+        .content-card {
+            background: rgba(255, 255, 255, 0.9); padding: 35px; border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(143, 185, 214, 0.15); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8); border-top: 5px solid #a5cdec;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative;
+        }
+        .content-card:hover { transform: translateY(-12px) scale(1.02); box-shadow: 0 25px 50px rgba(143, 185, 214, 0.3); background: rgba(255, 255, 255, 1); border-color: #fff; }
+        
+        .waypoint-left .content-card { border-right: 5px solid #a5cdec; border-top: 1px solid rgba(255, 255, 255, 0.8); }
+        .waypoint-right .content-card { border-left: 5px solid #a5cdec; border-top: 1px solid rgba(255, 255, 255, 0.8); }
+
+        /* Skill Bar Animation */
+        @keyframes fillBarAnim { 0% { max-width: 0%; } 100% { max-width: 100%; } }
+        .skill-bar-fill { max-width: 0%; }
+        .waypoint.visible .skill-bar-fill { animation: fillBarAnim 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        /* Graphic Fillers */
+        .graphic-filler { position: absolute; top: 50%; width: 70%; height: 200px; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+        @keyframes floatGraphic { 0%, 100% { transform: translateY(-50%) translateY(0px); } 50% { transform: translateY(-50%) translateY(-20px); } }
+        .waypoint-left .graphic-filler { left: 115%; animation: floatGraphic 5s ease-in-out infinite; }
+        .waypoint-right .graphic-filler { right: 115%; animation: floatGraphic 6s ease-in-out infinite; animation-delay: 1s; }
+        .illustration-circle { position: absolute; width: 220px; height: 220px; background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(209, 236, 249, 0.4) 40%, transparent 70%); border-radius: 50%; filter: blur(3px); box-shadow: 0 0 30px rgba(255,255,255,0.8); }
+
+        /* Confetti */
+        @keyframes popStar { 0% { transform: scale(0) rotate(0); opacity: 0; } 50% { transform: scale(1.5) rotate(180deg); opacity: 1; } 100% { transform: scale(0.8) rotate(360deg); opacity: 0; top: 120%; } }
+        .confetti-star { position: absolute; font-size: 1.5rem; opacity: 0; pointer-events: none; }
+        .waypoint.visible .confetti-star { animation: popStar 3s ease-out infinite; }
+
+        @media (max-width: 768px) {
+            .flight-path, .flight-progress, .flight-drop { left: 40px; }
+            .airplane { left: 40px; }
+            .waypoint { width: calc(100% - 90px); left: 90px !important; text-align: left !important; margin-bottom: 70px; }
+            .waypoint-left, .waypoint-right { transform: translateY(100px) scale(0.9) !important; }
+            .waypoint.visible { transform: translateY(0) scale(1) !important; }
+            .waypoint-left .content-card, .waypoint-right .content-card { border-left: 5px solid #a5cdec; border-right: 1px solid rgba(255,255,255,0.8); }
+            .marker { left: -19px !important; right: auto !important; transform: translateX(-50%) !important; }
+            .graphic-filler { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- INTRO CINEMATIC SCREEN (Short Movie) -->
+    <div id="intro-screen" class="fixed inset-0 flex items-center justify-center transition-opacity duration-1000">
+        <!-- Scene 1: Check-in -->
+        <div class="intro-scene scene-1">
+            <div class="relative w-48 h-48 mx-auto mb-4 flex items-center justify-center">
+                <div class="absolute text-7xl drop-shadow-2xl animate-bounce" style="animation-duration: 2s; z-index: 2;">🧳</div>
+                <div class="absolute text-5xl drop-shadow-xl translate-x-12 -translate-y-8 rotate-12" style="z-index: 1;">🎫</div>
+                <div class="absolute text-6xl drop-shadow-xl -translate-x-10 translate-y-6 -rotate-12" style="z-index: 3;">🛂</div>
+            </div>
+            <h2 class="text-3xl font-extrabold text-white font-heading tracking-widest drop-shadow-md mb-2">CHECKING IN...</h2>
+            <div class="w-64 h-3 bg-white/30 rounded-full mx-auto overflow-hidden shadow-inner mt-4">
+                <div class="h-full bg-white rounded-full animate-load-bar"></div>
+            </div>
+        </div>
+        <!-- Scene 2: Flight -->
+        <div class="intro-scene scene-2 bg-gradient-to-r from-[#4ca1af] to-[#c4e0e5]">
+            <div class="absolute inset-0 overflow-hidden pointer-events-none">
+                <div class="absolute text-7xl text-white/60 top-1/4" style="left: 100%; animation: fastCloud 1.5s linear infinite;">☁️</div>
+                <div class="absolute text-6xl text-white/40 top-3/4" style="left: 100%; animation: fastCloud 1s linear infinite 0.5s;">☁️</div>
+                <div class="absolute text-8xl text-white/50 top-2/4" style="left: 100%; animation: fastCloud 1.2s linear infinite 0.2s;">☁️</div>
+                <div class="absolute text-5xl text-white/70 top-1/3" style="left: 100%; animation: fastCloud 0.8s linear infinite 0.7s;">☁️</div>
+            </div>
+            <i class="fas fa-plane text-9xl text-white drop-shadow-[0_20px_30px_rgba(0,0,0,0.2)] animate-[planeTurbulence_0.8s_ease-in-out_infinite]" style="transform: rotate(15deg);"></i>
+            <h2 class="text-4xl font-black text-white mt-8 italic drop-shadow-lg tracking-widest">CẤT CÁNH!</h2>
+        </div>
+        <!-- Scene 3: Welcome -->
+        <div class="intro-scene scene-3">
+            <div class="relative flex items-center justify-center mb-6">
+                <div class="absolute text-8xl text-[#fde047] blur-md animate-pulse">☀️</div>
+                <div class="text-6xl spin-slow relative z-10">✨</div>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white text-center drop-shadow-xl px-4 leading-tight font-heading">
+                Chào mừng bạn đến với chuyến bay<br>
+                <span class="text-[#fef08a] mt-2 inline-block bg-white/20 px-6 py-2 rounded-2xl backdrop-blur-sm border border-white/40">MTD-2026</span>
+            </h1>
+        </div>
+    </div>
+
+    <!-- Animated Background Clouds, Orbs -->
+    <div class="clouds-container">
+        <div class="glow-orb" style="width: 30vw; height: 30vw; top: 10%; left: 10%; animation-delay: 0s;"></div>
+        <div class="glow-orb" style="width: 25vw; height: 25vw; top: 40%; right: 5%; animation-delay: -5s;"></div>
+        <div class="glow-orb" style="width: 40vw; height: 40vw; top: 75%; left: -5%; animation-delay: -10s;"></div>
+        <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3" style="animation-delay: -20s;"></div><div class="cloud c4" style="animation-delay: -10s;"></div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="sky-bg pt-24 pb-16 px-4 text-center relative">
+        <div class="relative inline-block mb-10 mt-8">
+            <img src="file:///C:/Users/PC/.gemini/antigravity/brain/f022524d-9cee-4087-ab27-abb4f2ea65ba/.user_uploaded/media_1791187819247.jpg" alt="Mỵ Thùy Dung" class="profile-pic mx-auto">
+            <div class="absolute -top-4 -right-4 text-[#fde047] text-4xl animate-bounce"><i class="fas fa-sparkles"></i></div>
+            <div class="absolute bottom-5 -left-6 text-[#a5cdec] text-3xl animate-pulse"><i class="fas fa-star"></i></div>
+            <div class="absolute top-1/2 -right-10 text-[#e59eb4] text-2xl spin-slow"><i class="fas fa-certificate"></i></div>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold text-[#3a6887] mb-4 tracking-tight drop-shadow-sm transition-transform hover:scale-105 duration-300">Mỵ Thùy Dung</h1>
+        <p class="text-xl md:text-2xl text-[#5b8dae] font-semibold font-heading bg-white/60 inline-block px-8 py-3 rounded-full backdrop-blur-md border border-white/80 shadow-lg hover:shadow-xl transition-shadow cursor-default">
+            Chuyến Bay Khám Phá Bản Thân <i class="fas fa-location-arrow ml-2 text-[#78add1]"></i>
+        </p>
+    </header>
+
+    <!-- The Journey Timeline -->
+    <section id="journey" class="relative pb-20">
+        <div class="timeline-container" id="timeline">
+            <!-- Flight Path -->
+            <div class="flight-path" id="flight-path"></div>
+            <div class="flight-progress" id="flight-progress"></div>
+            <div class="flight-drop"></div>
+            <div class="airplane" id="plane"><i class="fas fa-plane"></i></div>
+
+            <!-- Waypoint 1: Cất cánh - Giới thiệu (BOARDING PASS) -->
+            <div class="waypoint waypoint-left">
+                <div class="marker"><i class="fas fa-ticket-alt"></i></div>
+                
+                <div class="content-card !p-0 overflow-hidden">
+                    <div class="p-8">
+                        <div class="flex items-center justify-between mb-5 pb-5 border-b-2 border-dashed border-[#b8def2]">
+                            <h2 class="text-3xl font-black text-[#3a6887] uppercase tracking-widest font-heading">Boarding Pass</h2>
+                            <i class="fas fa-qrcode text-5xl text-[#a5cdec]"></i>
+                        </div>
+                        <div class="grid grid-cols-2 gap-5 mb-5 text-left">
+                            <div>
+                                <p class="text-[11px] text-[#82a4b8] font-bold uppercase tracking-widest mb-1">Hành khách / Passenger</p>
+                                <p class="font-black text-[#45708f] text-xl font-heading tracking-wide">MỴ THÙY DUNG</p>
+                            </div>
+                            <div>
+                                <p class="text-[11px] text-[#82a4b8] font-bold uppercase tracking-widest mb-1">Hạng vé / Class</p>
+                                <p class="font-bold text-[#e59eb4] text-xl flex items-center gap-2">First Class <i class="fas fa-star text-sm"></i></p>
+                            </div>
+                            <div class="col-span-2">
+                                <p class="text-[11px] text-[#82a4b8] font-bold uppercase tracking-widest mb-1">Điểm đến / Destination</p>
+                                <p class="font-bold text-[#597a8f] text-md">Sinh viên năm 2 ĐH Ngoại thương (Kinh tế quốc tế)</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-6">
+                            <span class="px-3 py-1.5 bg-gradient-to-r from-[#e8f4fa] to-white border border-[#cce5f5] rounded-lg text-[#45708f] text-xs font-bold shadow-sm flex items-center gap-2"><i class="fas fa-brain text-[#78add1]"></i> Tư duy hệ thống</span>
+                            <span class="px-3 py-1.5 bg-gradient-to-r from-[#f0fbf9] to-white border border-[#c4eae4] rounded-lg text-[#58ad73] text-xs font-bold shadow-sm flex items-center gap-2"><i class="fas fa-chart-pie text-[#7ac7bd]"></i> Phân tích dữ liệu</span>
+                            <span class="px-3 py-1.5 bg-gradient-to-r from-[#fff9ed] to-white border border-[#fce9c5] rounded-lg text-[#d9a04a] text-xs font-bold shadow-sm flex items-center gap-2"><i class="fas fa-rocket text-[#f0cb67]"></i> Tư duy cầu tiến</span>
+                        </div>
+                    </div>
+                    <!-- Ticket Footer -->
+                    <div class="bg-[#f4f9fc] p-5 flex justify-between items-center border-t border-[#d1ecf9] relative overflow-hidden">
+                        <div class="absolute inset-0 opacity-10 flex text-6xl tracking-[0.2em] font-mono items-center justify-center pointer-events-none select-none">||||| ||| || ||| || ||||</div>
+                        <p class="text-xs text-[#82a4b8] font-bold uppercase tracking-widest relative z-10">Gate: <span class="text-[#45708f] font-black">A1</span></p>
+                        <p class="text-xs text-[#82a4b8] font-bold uppercase tracking-widest relative z-10">Flight: <span class="text-[#45708f] font-black">MTD-2026</span></p>
+                    </div>
+                </div>
+
+                <div class="graphic-filler">
+                    <div class="relative w-full h-full flex items-center justify-center">
+                        <div class="illustration-circle"></div>
+                        <div class="absolute text-8xl drop-shadow-xl z-10 animate-bounce" style="animation-duration: 3s;">👩‍✈️</div>
+                        <i class="fas fa-globe-americas text-7xl text-[#bde0f5] absolute ml-28 mb-12 shadow-sm animate-pulse"></i>
+                        <i class="fas fa-passport text-6xl text-[#e59eb4] absolute -ml-24 mt-12 rotate-12 drop-shadow-md hover:rotate-45 transition-transform duration-500"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Waypoint 2: Học vấn (VIP CERTIFICATE) -->
+            <div class="waypoint waypoint-right">
+                <div class="marker"><i class="fas fa-university"></i></div>
+                
+                <div class="graphic-filler">
+                    <div class="relative w-full h-full flex items-center justify-center">
+                        <div class="illustration-circle"></div>
+                        <div class="absolute text-8xl drop-shadow-xl z-10 animate-bounce" style="animation-duration: 3.5s;">👩‍🎓</div>
+                        <i class="fas fa-book-open text-7xl text-[#fce9c5] absolute -ml-24 mt-12 drop-shadow-md animate-pulse"></i>
+                        <div class="absolute text-6xl ml-24 mt-16 rotate-12 drop-shadow-lg hover:-rotate-12 transition-transform duration-500">🎓</div>
+                    </div>
+                </div>
+
+                <div class="content-card overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-bl from-[#fce9c5] to-transparent rounded-full opacity-40 pointer-events-none"></div>
+                    
+                    <h2 class="text-3xl font-black text-[#3a6887] mb-8 flex items-center gap-4 font-heading uppercase tracking-wider">
+                        <div class="w-12 h-12 rounded-full bg-[#fff9ed] flex items-center justify-center text-[#f0cb67] shadow-sm border border-[#fce9c5]"><i class="fas fa-award text-2xl"></i></div> 
+                        Tri Thức
+                    </h2>
+                    
+                    <!-- University Badge -->
+                    <div class="bg-gradient-to-r from-[#f4f9fc] to-[#e8f4fa] p-5 rounded-2xl border border-[#d1ecf9] relative overflow-hidden mb-6 group hover:shadow-md transition-shadow">
+                        <div class="absolute -right-4 -top-4 text-7xl text-[#d1ecf9] opacity-40 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500"><i class="fas fa-university"></i></div>
+                        <div class="relative z-10">
+                            <h3 class="font-black text-xl text-[#3a6887] mb-2">Đại học Ngoại Thương</h3>
+                            <p class="text-[#5b8dae] font-bold text-[15px] mb-3">Chuyên ngành: Kinh tế quốc tế</p>
+                            <div class="flex items-center gap-3">
+                                <span class="px-4 py-1.5 bg-white text-[#78add1] rounded-full text-[11px] font-black shadow-sm uppercase tracking-widest border border-[#cce5f5]">2025 - Hiện tại</span>
+                                <span class="w-3 h-3 rounded-full bg-[#58ad73] animate-pulse shadow-[0_0_8px_#58ad73]"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid Stats -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-[#e3f0f7] shadow-sm hover:-translate-y-1 hover:shadow-md transition-all group cursor-default">
+                            <p class="text-[11px] text-[#82a4b8] font-bold uppercase tracking-widest mb-1 flex items-center gap-1"><i class="fas fa-star text-[#f0cb67]"></i> GPA Hiện tại</p>
+                            <p class="font-black text-[#3a6887] text-4xl font-heading">3.66<span class="text-sm text-[#78add1] font-bold">/4.00</span></p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-[#e3f0f7] shadow-sm hover:-translate-y-1 hover:shadow-md transition-all group cursor-default">
+                            <p class="text-[11px] text-[#82a4b8] font-bold uppercase tracking-widest mb-1 flex items-center gap-1"><i class="fas fa-poll text-[#9bc4e2]"></i> Kỳ thi HSA</p>
+                            <p class="font-black text-[#3a6887] text-4xl font-heading">110<span class="text-sm text-[#78add1] font-bold">/150</span></p>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-[#e3f0f7] shadow-sm hover:-translate-y-1 hover:shadow-md transition-all group cursor-default">
+                            <p class="text-[11px] text-[#82a4b8] font-bold uppercase tracking-widest mb-1 flex items-center gap-1"><i class="fas fa-marker text-[#e89eb6]"></i> Khối A00</p>
+                            <p class="font-black text-[#3a6887] text-4xl font-heading">27.75</p>
+                        </div>
+                        <div class="bg-gradient-to-br from-[#fff9ed] to-white p-4 rounded-2xl border border-[#fce9c5] shadow-sm hover:-translate-y-1 hover:shadow-md transition-all flex flex-col justify-center items-center text-center group cursor-default">
+                            <i class="fas fa-medal text-[#d9a04a] text-3xl mb-2 group-hover:scale-125 transition-transform duration-300"></i>
+                            <p class="text-[10px] text-[#66563b] font-black uppercase tracking-wide leading-tight">Giải KK Toán HSG Tỉnh 2025</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Waypoint 3: Kinh nghiệm (TRANSIT FLIGHTS) -->
+            <div class="waypoint waypoint-left">
+                <div class="marker"><i class="fas fa-briefcase"></i></div>
+                
+                <div class="content-card relative overflow-hidden">
+                    <h2 class="text-3xl font-black text-[#3a6887] mb-8 flex items-center justify-end gap-4 font-heading uppercase tracking-wider">
+                        Trải Nghiệm
+                        <div class="w-12 h-12 rounded-full bg-[#fdf2f5] flex items-center justify-center text-[#e89eb6] shadow-sm border border-[#f9e1e7]"><i class="fas fa-route text-xl"></i></div> 
+                    </h2>
+                    
+                    <!-- Flight Path Timeline inside Card -->
+                    <div class="relative pr-8 space-y-8 before:content-[''] before:absolute before:right-[11px] before:top-2 before:bottom-4 before:w-[2px] before:bg-gradient-to-b before:from-[#9fa6d8] before:to-[#8ed6cc] before:rounded-full text-right">
+                        
+                        <!-- Stop 1 -->
+                        <div class="relative">
+                            <div class="absolute -right-[37px] top-1 w-6 h-6 rounded-full bg-white border-[5px] border-[#9fa6d8] shadow-sm z-10"></div>
+                            <div class="bg-white p-5 rounded-2xl border border-[#dce0f3] shadow-[0_4px_15px_rgba(159,166,216,0.1)] hover:shadow-[0_8px_25px_rgba(159,166,216,0.2)] transition-shadow hover:border-[#9fa6d8] relative group">
+                                <div class="absolute top-4 left-4 text-[#9fa6d8] opacity-10 text-4xl group-hover:-rotate-12 transition-transform"><i class="fas fa-users"></i></div>
+                                <h3 class="font-black text-xl text-[#3a6887] mb-2 leading-tight">Nghiên cứu hành vi tiêu dùng số</h3>
+                                <span class="inline-block bg-[#eff0f8] text-[#717ac2] px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest mb-4 border border-[#dce0f3]">Thành viên nhóm</span>
+                                <ul class="space-y-3 text-[#597a8f] text-[14px] font-medium inline-block text-left w-full">
+                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-[#9fa6d8] mt-[3px]"></i><span><strong class="text-[#45708f]">Mục tiêu:</strong> Tác động Hiệu ứng mỏ neo trong Livestream.</span></li>
+                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-[#9fa6d8] mt-[3px]"></i><span><strong class="text-[#45708f]">Phương pháp:</strong> Quan sát thực chứng & Tâm lý học kinh tế.</span></li>
+                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle text-[#9fa6d8] mt-[3px]"></i><span><strong class="text-[#45708f]">Kết quả:</strong> Đề xuất mô hình tương tác tối ưu.</span></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Stop 2 -->
+                        <div class="relative">
+                            <div class="absolute -right-[37px] top-1 w-6 h-6 rounded-full bg-white border-[5px] border-[#8ed6cc] shadow-sm z-10"></div>
+                            <div class="bg-gradient-to-bl from-[#f0fbf9] to-white p-5 rounded-2xl border border-[#c4eae4] shadow-[0_4px_15px_rgba(142,214,204,0.1)] hover:shadow-[0_8px_25px_rgba(142,214,204,0.2)] transition-shadow hover:border-[#8ed6cc] group">
+                                <h3 class="font-black text-xl text-[#3a6887] mb-3 flex justify-end gap-3 items-center">
+                                    <i class="fas fa-chalkboard-teacher text-[#7ac7bd] text-2xl opacity-40 group-hover:scale-110 transition-transform"></i> Gia sư
+                               </h3>
+                                <p class="text-[#597a8f] text-[15px] font-medium leading-relaxed">
+                                    Thiết kế giáo án cá nhân hóa cho học sinh THCS/THPT; ứng dụng sơ đồ tư duy (<strong>Mindmap</strong>) để hệ thống hóa kiến thức hiệu quả.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="graphic-filler">
+                    <div class="relative w-full h-full flex items-center justify-center">
+                        <div class="illustration-circle"></div>
+                        <div class="absolute text-8xl drop-shadow-xl z-10 animate-bounce" style="animation-duration: 4s;">👩‍💻</div>
+                        <i class="fas fa-laptop-code text-7xl text-[#78add1] absolute -ml-28 mt-16 drop-shadow-md hover:scale-110 transition-transform"></i>
+                        <i class="fas fa-lightbulb text-6xl text-[#f0cb67] absolute ml-24 -mt-20 animate-pulse drop-shadow-md"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Waypoint 4: Kỹ năng & Sở thích (SKILL BARS) -->
+            <div class="waypoint waypoint-right">
+                <div class="marker"><i class="fas fa-toolbox"></i></div>
+                
+                <div class="graphic-filler">
+                    <div class="relative w-full h-full flex items-center justify-center">
+                        <div class="illustration-circle"></div>
+                        <div class="absolute text-8xl drop-shadow-xl z-10 animate-bounce" style="animation-duration: 3.2s;">🧳</div>
+                        <div class="absolute text-6xl ml-28 mt-16 drop-shadow-lg animate-pulse">🎧</div>
+                        <i class="fas fa-camera-retro text-6xl text-[#78add1] absolute -ml-24 -mt-12 -rotate-12 drop-shadow-md hover:rotate-0 transition-transform duration-300"></i>
+                    </div>
+                </div>
+
+                <div class="content-card relative overflow-hidden">
+                    <h2 class="text-3xl font-black text-[#3a6887] mb-8 flex items-center gap-4 font-heading uppercase tracking-wider">
+                        <div class="w-12 h-12 rounded-full bg-[#e8f4fa] flex items-center justify-center text-[#78add1] shadow-sm border border-[#cce5f5]"><i class="fas fa-bolt text-2xl"></i></div> 
+                        Hành Trang
+                    </h2>
+                    
+                    <div class="space-y-8 text-left">
+                        <!-- Skills -->
+                        <div>
+                            <h3 class="font-black text-sm uppercase tracking-widest text-[#82a4b8] mb-5 border-b border-[#e3f0f7] pb-3 flex items-center gap-2"><i class="fas fa-laptop-code text-[#78add1]"></i> Kỹ Năng Chuyên Môn</h3>
+                            
+                            <div class="mb-5 group">
+                                <div class="flex justify-between text-xs mb-2 font-bold text-[#45708f] tracking-wide"><span>Tin học văn phòng (Word chuẩn APA, Excel)</span><span class="text-[#78add1] font-black text-sm">95%</span></div>
+                                <div class="w-full h-3 bg-[#e8f4fa] rounded-full overflow-hidden shadow-inner relative">
+                                    <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-[#78add1] to-[#9bc4e2] rounded-full skill-bar-fill shadow-[0_0_10px_rgba(120,173,209,0.5)]" style="width: 95%;"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-2 group">
+                                <div class="flex justify-between text-xs mb-2 font-bold text-[#45708f] tracking-wide"><span>Nghiên cứu & Phân tích (NotebookLM)</span><span class="text-[#e59eb4] font-black text-sm">85%</span></div>
+                                <div class="w-full h-3 bg-[#fdf2f5] rounded-full overflow-hidden shadow-inner relative">
+                                    <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-[#e89eb6] to-[#f0c4d2] rounded-full skill-bar-fill shadow-[0_0_10px_rgba(229,158,180,0.5)]" style="width: 85%; animation-delay: 0.3s;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hobbies -->
+                        <div>
+                            <h3 class="font-black text-sm uppercase tracking-widest text-[#82a4b8] mb-5 border-b border-[#e3f0f7] pb-3 flex items-center gap-2"><i class="fas fa-battery-full text-[#58ad73]"></i> Năng lượng Tích cực</h3>
+                            <div class="flex gap-4">
+                                <div class="flex-1 bg-gradient-to-br from-[#fcf5f7] to-white border border-[#f9eff2] p-4 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all group cursor-default">
+                                    <div class="w-12 h-12 rounded-full bg-[#fdf2f5] flex items-center justify-center text-[#e59eb4] text-xl group-hover:scale-125 transition-transform duration-300 shadow-sm border border-[#f9e1e7]"><i class="fas fa-headphones-alt"></i></div>
+                                    <span class="font-black text-[#664b55] text-[12px] uppercase tracking-wider mt-1">Nghe nhạc</span>
+                                </div>
+                                <div class="flex-1 bg-gradient-to-br from-[#fff5eb] to-white border border-[#fde8d4] p-4 rounded-2xl flex flex-col items-center justify-center gap-2 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all group cursor-default">
+                                    <div class="w-12 h-12 rounded-full bg-[#fff5eb] flex items-center justify-center text-[#e5ab73] text-xl group-hover:scale-125 transition-transform duration-300 shadow-sm border border-[#fde8d4]"><i class="fas fa-book-open"></i></div>
+                                    <span class="font-black text-[#664b55] text-[12px] uppercase tracking-wider mt-1">Đọc sách</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Waypoint 5: Hạ cánh (Liên hệ) -->
+            <div class="waypoint waypoint-left mb-0">
+                <div class="marker marker-final"><i class="fas fa-flag-checkered"></i></div>
+                
+                <div class="content-card text-center !text-center bg-gradient-to-b from-white to-[#f0f7fb] border-b-8 border-b-[#9bc4e2] relative overflow-visible">
+                    <!-- Confetti -->
+                    <div class="confetti-star text-[#fde047]" style="top: 0; left: 10%; animation-delay: 0s;">✨</div>
+                    <div class="confetti-star text-[#e59eb4]" style="top: -10%; left: 30%; animation-delay: 0.5s;">🎉</div>
+                    <div class="confetti-star text-[#78add1]" style="top: -5%; right: 20%; animation-delay: 1.2s;">🌟</div>
+                    <div class="confetti-star text-[#94d1a8]" style="top: 10%; right: 10%; animation-delay: 0.8s;">🎊</div>
+                    <div class="confetti-star text-[#e5ab73]" style="top: 20%; left: -5%; animation-delay: 1.5s;">✨</div>
+                    
+                    <div class="w-20 h-20 rounded-full bg-[#78add1] text-white flex items-center justify-center text-4xl mx-auto mb-6 shadow-[0_10px_25px_rgba(120,173,209,0.5)] animate-bounce border-4 border-white relative z-10">
+                        <i class="fas fa-plane-arrival"></i>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black text-[#3a6887] mb-4 tracking-tight">
+                        Hạ Cánh Thành Công!
+                    </h2>
+                    <p class="text-[#7195a8] mb-10 font-bold text-lg bg-[#e8f4fa] inline-block px-6 py-2 rounded-full border border-[#d1ecf9]">Trạm cuối cùng: Cùng kết nối và hành động!</p>
+                    
+                    <div class="flex flex-col gap-4 text-left w-full max-w-sm mx-auto relative z-10">
+                        <a href="tel:+84334858384" class="group flex items-center gap-5 bg-white p-4 rounded-2xl shadow-sm border border-[#e3f0f7] hover:border-[#a5cdec] hover:shadow-lg hover:-translate-y-1 transition-all">
+                            <div class="w-14 h-14 rounded-full bg-[#e8f4fa] flex items-center justify-center text-[#78add1] group-hover:bg-[#78add1] group-hover:text-white group-hover:rotate-12 transition-all">
+                                <i class="fas fa-phone-alt text-xl"></i>
+                            </div>
+                            <span class="font-extrabold text-[#45708f] text-xl group-hover:text-[#5b8dae]">+84 334 858 384</span>
+                        </a>
+                        
+                        <a href="mailto:mythuydung3207@gmail.com" class="group flex items-center gap-5 bg-white p-4 rounded-2xl shadow-sm border border-[#e3f0f7] hover:border-[#a5cdec] hover:shadow-lg hover:-translate-y-1 transition-all">
+                            <div class="w-14 h-14 rounded-full bg-[#fae8eb] flex items-center justify-center text-[#d97c92] group-hover:bg-[#d97c92] group-hover:text-white group-hover:-rotate-12 transition-all">
+                                <i class="fas fa-envelope text-xl"></i>
+                            </div>
+                            <span class="font-bold text-[#45708f] text-lg group-hover:text-[#d97c92] truncate">mythuydung3207@gmail.com</span>
+                        </a>
+                        
+                        <a href="https://www.linkedin.com/in/mỵ-thùy-dung-678598403" target="_blank" class="group flex items-center gap-5 bg-white p-4 rounded-2xl shadow-sm border border-[#e3f0f7] hover:border-[#a5cdec] hover:shadow-lg hover:-translate-y-1 transition-all">
+                            <div class="w-14 h-14 rounded-full bg-[#e8effa] flex items-center justify-center text-[#7c9cd9] group-hover:bg-[#7c9cd9] group-hover:text-white group-hover:rotate-12 transition-all">
+                                <i class="fab fa-linkedin-in text-2xl"></i>
+                            </div>
+                            <span class="font-bold text-[#45708f] text-lg group-hover:text-[#7c9cd9] truncate">LinkedIn Profile</span>
+                        </a>
+                        
+                        <div class="flex items-center gap-5 bg-white p-4 rounded-2xl shadow-sm border border-[#e3f0f7] hover:border-[#c4eae4] hover:shadow-lg transition-all cursor-default group">
+                            <div class="w-14 h-14 rounded-full bg-[#e8faef] flex items-center justify-center text-[#6dc28d]">
+                                <i class="fas fa-map-marker-alt text-2xl group-hover:animate-bounce"></i>
+                            </div>
+                            <span class="font-bold text-[#45708f] text-lg">Cầu Giấy, Hà Nội</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Graphic -->
+    <div class="w-full relative -mb-1 mt-10">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="w-full h-auto text-[#6292b3] fill-current">
+            <path d="M0,224L48,208C96,192,192,160,288,165.3C384,171,480,213,576,213.3C672,213,768,171,864,160C960,149,1056,171,1152,192C1248,213,1344,235,1392,245.3L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        </svg>
+    </div>
+    <footer class="bg-[#6292b3] text-[#dcf0fa] py-10 text-center">
+        <div class="max-w-4xl mx-auto flex flex-col items-center">
+            <i class="fas fa-plane text-4xl mb-5 text-[#89b7d6] opacity-60 spin-slow" style="animation-duration: 15s;"></i>
+            <p class="font-bold text-xl text-white mb-3 tracking-wide">Chuyến bay thiết kế dành riêng cho Mỵ Thùy Dung</p>
+            <p class="text-sm opacity-80 font-medium bg-[#4a7796] px-4 py-1 rounded-full">&copy; 2026. Sẵn sàng cho mọi hành trình.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const introScreen = document.getElementById('intro-screen');
+            const timeline = document.getElementById('timeline');
+            const plane = document.getElementById('plane');
+            const flightProgress = document.getElementById('flight-progress');
+            const waypoints = document.querySelectorAll('.waypoint');
+
+            setTimeout(() => {
+                introScreen.classList.add('opacity-0');
+                document.body.style.overflow = 'auto'; 
+                setTimeout(() => {
+                    introScreen.remove();
+                    onScroll(); 
+                }, 1000); 
+            }, 7500); 
+
+            plane.style.top = '0%';
+            flightProgress.style.height = '0%';
+
+            function onScroll() {
+                const timelineRect = timeline.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                const startOffset = windowHeight * 0.5; 
+                let progress = (startOffset - timelineRect.top) / (timelineRect.height);
+                progress = Math.max(0, Math.min(1, progress));
+                
+                const percent = (progress * 100) + '%';
+                plane.style.top = percent;
+                flightProgress.style.height = percent;
+                
+                waypoints.forEach(wp => {
+                    const wpRect = wp.getBoundingClientRect();
+                    if (wpRect.top < windowHeight * 0.90) {
+                        wp.classList.add('visible');
+                    }
+                });
+            }
+
+            let isScrolling = false;
+            window.addEventListener('scroll', () => {
+                if (!isScrolling) {
+                    window.requestAnimationFrame(() => {
+                        onScroll();
+                        isScrolling = false;
+                    });
+                    isScrolling = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
